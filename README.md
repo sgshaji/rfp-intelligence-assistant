@@ -4,6 +4,24 @@ A **Custom Engine Agent** for Microsoft Teams and Microsoft 365 Copilot that hel
 
 Built with the [Microsoft 365 Agents SDK](https://github.com/Microsoft/Agents), [LangChain / LangGraph](https://js.langchain.com/), and the [Microsoft Learn MCP Server](https://github.com/MicrosoftDocs/mcp).
 
+> **Status:** reference implementation. The workflow retrieves official documentation
+> to support an RFP draft; a person must verify the cited source, product scope,
+> date, licensing, and contractual wording before using the answer externally.
+
+## Delivery problem and trade-off
+
+RFP answers need traceable, current product information rather than an unsupported
+model assertion. The agent integrates documentation-search tools into a Teams/Copilot
+workflow and structures the draft into an answer, supporting detail, references,
+and follow-up tips.
+
+**Inspect:** [agent and tool integration](src/agent.js), [hosting entry point](src/index.js),
+and [deployment configuration](m365agents.yml).
+
+Retrieval improves the evidence available to the model; it does not guarantee that
+the model uses it correctly. No hallucination-rate, production-adoption, or
+end-to-end quality result is claimed here.
+
 ---
 
 ## How it works
@@ -22,7 +40,9 @@ User question (Teams / Copilot)
   Structured RFP response (📋 Answer · 🔍 Detail · 🔗 References · 💡 Tips)
 ```
 
-Every response is grounded in **live, official Microsoft documentation** — no hallucinations, no stale training data.
+The agent is instructed to search **live, official Microsoft documentation** before
+drafting an answer and to cite retrieved URLs. This is a retrieval-and-prompting
+design, not a guarantee of correct answers or hallucination-free output.
 
 ---
 
@@ -34,7 +54,7 @@ Each answer follows a consistent RFP-ready structure:
 |---|---|
 | 📋 **RFP Answer** | 2–5 sentence, copy-paste-ready answer written in third person |
 | 🔍 **Supporting Detail** | Technical/commercial context — SLAs, certifications, architecture |
-| 🔗 **References** | Actual Microsoft Learn URLs retrieved (never fabricated) |
+| 🔗 **References** | Intended to contain retrieved Microsoft Learn URLs; verify the citations before use |
 | 💡 **Tips** | How to strengthen the answer in your RFP submission |
 
 ---
